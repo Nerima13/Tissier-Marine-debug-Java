@@ -3,41 +3,48 @@ package com.hemebiotech.analytics;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 
 public class AnalyticsCounter {
-	private static int headacheCount = 0;	// initialize to 0
-	private static int rashCount = 0;		// initialize to 0
-	private static int pupilCount = 0;		// initialize to 0
 	
-	public static void main(String args[]) throws Exception {
-		// first get input
-		BufferedReader reader = new BufferedReader (new FileReader("symptoms.txt"));
-		String line = reader.readLine();
+	// Initialization of variables to count symptoms
+	private static int headacheCount = 0;
+	private static int rashCount = 0;
+	private static int pupilCount = 0;
+	
+	public static void main(String args[]) {
+		
+		// Using try-with-resources to ensure the file is closed
+		try (BufferedReader reader = new BufferedReader(new FileReader("symptoms.txt"))) {
+		String line;
 
-		int i = 0;	// set i to 0
-		int headCount = 0;	// counts headaches
-		while (line != null) {
-			i++;	// increment i
-			System.out.println("symptom from file: " + line);
+		// Reading the file and counting symptoms
+		while ((line = reader.readLine()) != null) {
+			System.out.println("Symptom from file : " + line);
 			if (line.equals("headache")) {
-				headCount++;
-				System.out.println("number of headaches: " + headCount);
+				headacheCount++;
 			}
-			else if (line.equals("rush")) {
-				rashCount++;
+			else if (line.equals("rash")) {
+				rashCount++;	
 			}
 			else if (line.contains("pupils")) {
 				pupilCount++;
 			}
-
-			line = reader.readLine();	// get another symptom
 		}
 		
-		// next generate output
-		FileWriter writer = new FileWriter ("result.out");
+	} catch (IOException e) {
+		// Displaying an error if the file is not found 
+		System.err.println("Error reading file : " + e.getMessage());
+		}
+		
+		// Generating the output file with the results
+		try (FileWriter writer = new FileWriter ("result.out")) {
 		writer.write("headache: " + headacheCount + "\n");
 		writer.write("rash: " + rashCount + "\n");
-		writer.write("dialated pupils: " + pupilCount + "\n");
-		writer.close();
+		writer.write("dilated pupils: " + pupilCount + "\n");
+		} catch (IOException e) {
+			// Displaying an error if writing to the file fails
+			System.err.println("Error writing to file : " + e.getMessage());
+		}
 	}
 }
