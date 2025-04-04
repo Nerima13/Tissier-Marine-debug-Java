@@ -25,7 +25,7 @@ public class AnalyticsCounter {
 	public Map<String, Integer> countSymptoms(List<String> symptoms) {
 		Map<String, Integer> symptomCounts = new HashMap<>();
 		for (String symptom : symptoms) {
-			symptomCounts.put(symptom, symptomCounts.getOrDefault(symptomCounts, 0) + 1);
+			symptomCounts.put(symptom, symptomCounts.getOrDefault(symptom, 0) + 1);
 		}
 		return symptomCounts;
 	}
@@ -38,27 +38,6 @@ public class AnalyticsCounter {
 	// Method to write the symptoms and their occurrences to the output file
 		public void writeSymptoms(Map<String, Integer> symptoms) {
 		writer.writeSymptoms(symptoms);
-		}
-	
-	// Main method that executes
-	public static void main(String[] args) {
-		
-		// Create instances of ISymptomReader, ISymptomWriter and AnalyticsCounter
-		ISymptomReader reader = new ReadSymptomDataFromFile("symptoms.txt");
-		ISymptomWriter writer = new WriteSymptomDataToFile("result.out");
-		AnalyticsCounter counter = new AnalyticsCounter(reader, writer);
-
-		// Step 1 : Get symptoms
-		List<String> symptoms = counter.getSymptoms();
-		
-		// Step 2 : Count symptoms
-		Map<String, Integer> symptomCounts = counter.countSymptoms(symptoms);
-		
-		// Step 3 : Sort symptoms
-		Map<String, Integer> sortedSymptoms = counter.sortSymptoms(symptomCounts);
-		
-		// Step 4 : Write the result to file
-		counter.writeSymptoms(sortedSymptoms);
 	}
 }
 
